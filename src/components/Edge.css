@@ -1,0 +1,152 @@
+/* P3R 菜单式能力卡：斜切平行四边形 + 电光蓝选中态 */
+
+.edge {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 118px, rgba(150, 180, 255, 0.05) 118px 120px),
+    repeating-linear-gradient(90deg, transparent 0 118px, rgba(150, 180, 255, 0.05) 118px 120px),
+    var(--bg-2);
+  clip-path: polygon(0 2.6vw, 100% 0, 100% calc(100% - 2.6vw), 0 100%);
+  padding-block: clamp(120px, 12vw, 210px);
+}
+
+.edge__grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.edge-card {
+  position: relative;
+  border: 2px solid var(--line-strong);
+  background: rgba(5, 10, 36, 0.72);
+  padding: clamp(28px, 2.4vw, 44px);
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  transform: skewX(-4deg);
+  opacity: 0;
+  transition:
+    transform 0.45s var(--ease),
+    border-color 0.45s var(--ease),
+    background 0.45s var(--ease),
+    box-shadow 0.45s var(--ease);
+}
+
+/* 进场：上浮 + 斜切归位（animation 结束后交还 hover transition） */
+.edge-card.in {
+  opacity: 1;
+  animation: k-edge-in 1.25s var(--e-out) calc(0.42s + var(--d, 0s)) backwards;
+}
+
+@keyframes k-edge-in {
+  0% { opacity: 0; transform: translateY(76px) skewX(-7.5deg); }
+  100% { opacity: 1; transform: translateY(0) skewX(-4deg); }
+}
+
+/* 内容反向斜切，保持可读 */
+.edge-card > * {
+  transform: skewX(4deg);
+}
+
+.edge-card:hover,
+.edge-card--active {
+  transform: skewX(-4deg) translateY(-8px);
+  background: var(--blue);
+  border-color: rgba(244, 247, 255, 0.9);
+  box-shadow:
+    10px 10px 0 rgba(4, 6, 26, 0.65),
+    0 24px 90px rgba(30, 62, 240, 0.5);
+}
+
+.edge-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.edge-card__icon {
+  width: 44px;
+  height: 44px;
+  color: var(--cyan);
+  transition: color 0.45s var(--ease);
+}
+
+.edge-card__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.edge-card:hover .edge-card__icon,
+.edge-card--active .edge-card__icon {
+  color: #fff;
+}
+
+.edge-card__no {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.2em;
+  color: var(--faint);
+  transition: color 0.45s var(--ease);
+}
+
+.edge-card:hover .edge-card__no,
+.edge-card--active .edge-card__no {
+  color: var(--cyan);
+}
+
+.edge-card__titles {
+  display: grid;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.edge-card__cn {
+  font-size: clamp(22px, 1.7vw, 30px);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+.edge-card__titles .mono-label {
+  font-style: italic;
+  transition: color 0.45s var(--ease);
+}
+
+.edge-card:hover .mono-label,
+.edge-card--active .mono-label {
+  color: rgba(244, 247, 255, 0.75);
+}
+
+.edge-card__desc {
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.9;
+  transition: color 0.45s var(--ease);
+}
+
+.edge-card:hover .edge-card__desc,
+.edge-card--active .edge-card__desc {
+  color: rgba(244, 247, 255, 0.88);
+}
+
+/* 底部青色斜切条 */
+.edge-card__line {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+  background: var(--cyan);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s var(--ease);
+}
+
+.edge-card:hover .edge-card__line,
+.edge-card--active .edge-card__line {
+  transform: scaleX(1);
+}

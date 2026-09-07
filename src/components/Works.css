@@ -1,0 +1,236 @@
+.works__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(40px, 4vw, 72px) clamp(28px, 2.6vw, 48px);
+}
+
+.work--lg {
+  grid-column: span 7;
+}
+
+.work--sm {
+  grid-column: span 5;
+}
+
+/* 第二列错位下沉 */
+.work:nth-child(2) {
+  margin-top: clamp(48px, 6vw, 120px);
+}
+
+.work:nth-child(3) {
+  margin-top: clamp(-64px, -4vw, -32px);
+}
+
+/* ---------- 图片 ---------- */
+
+.work__media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--bg-2);
+  border: 2px solid var(--line-strong);
+  transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+
+/* 右上角青色切角 */
+.work__media::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 46px;
+  height: 46px;
+  background: var(--cyan);
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+
+.work__media:hover {
+  border-color: rgba(244, 247, 255, 0.85);
+  box-shadow: 0 24px 90px rgba(30, 62, 240, 0.45);
+}
+
+.work__media:hover::after {
+  opacity: 1;
+}
+
+/* 三层结构：plx 视差层 / zoom 缩放层 / img */
+.work__plx {
+  display: block;
+  will-change: transform;
+}
+
+.work__zoom {
+  display: block;
+  transform: scale(1.28);
+  transition: transform 1.7s var(--e-out) 0.18s;
+  will-change: transform;
+}
+
+.work.in .work__zoom {
+  transform: scale(1.12);
+}
+
+.work.in .work__media:hover .work__zoom {
+  transform: scale(1.17) rotate(-0.5deg);
+}
+
+.work__media img {
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  object-fit: cover;
+  filter: brightness(0.94);
+  transition: filter 0.9s var(--ease);
+}
+
+.work--sm .work__media img {
+  aspect-ratio: 4 / 3.4;
+}
+
+.work__media:hover img {
+  filter: brightness(1.03);
+}
+
+/* 序号：黑色斜切章（揭示后擦入） */
+.work__no {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  z-index: 3;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.2em;
+  color: #fff;
+  padding: 7px 14px;
+  background: rgba(4, 6, 26, 0.85);
+  transform: skewX(var(--skew-chip));
+  border-left: 3px solid var(--cyan);
+  clip-path: inset(0 100% 0 0);
+}
+
+.work.in .work__no {
+  animation: k-wipe 0.65s var(--e-inout) calc(0.85s + var(--d, 0s)) forwards;
+}
+
+/* 查看按钮：电光蓝斜切 */
+.work__view {
+  position: absolute;
+  right: 22px;
+  bottom: 20px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.14em;
+  color: #fff;
+  background: var(--blue-strong);
+  padding: 11px 20px;
+  transform: skewX(var(--skew-chip)) translateY(12px);
+  box-shadow: 5px 5px 0 rgba(4, 6, 26, 0.7);
+  opacity: 0;
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.45s var(--ease),
+    background 0.3s var(--ease),
+    color 0.3s var(--ease);
+}
+
+.work__view i {
+  font-style: normal;
+}
+
+.work__media:hover .work__view {
+  opacity: 1;
+  transform: skewX(var(--skew-chip)) translateY(0);
+}
+
+.work__view:hover {
+  background: var(--cyan);
+  color: var(--ink);
+}
+
+/* 列错位 stagger：封面与缩放层延迟叠加 --d */
+.work .reveal-cover {
+  transition-delay: calc(0.14s + var(--d, 0s));
+}
+
+.work .work__zoom {
+  transition-delay: calc(0.18s + var(--d, 0s));
+}
+
+/* ---------- 元信息（依次浮现） ---------- */
+
+.work__meta {
+  padding-top: 22px;
+  display: grid;
+  gap: 14px;
+}
+
+.work__meta > * {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 1.05s var(--e-out),
+    transform 1.05s var(--e-out);
+}
+
+.work.in .work__meta > :nth-child(1) {
+  transition-delay: calc(0.55s + var(--d, 0s));
+}
+
+.work.in .work__meta > :nth-child(2) {
+  transition-delay: calc(0.68s + var(--d, 0s));
+}
+
+.work.in .work__meta > * {
+  opacity: 1;
+  transform: none;
+}
+
+.work__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.work__title {
+  font-size: clamp(20px, 1.6vw, 28px);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  transform: skewX(-2deg);
+}
+
+.work__year {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--cyan);
+}
+
+.work__sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.work__tags {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.works__note {
+  margin-top: clamp(48px, 5vw, 80px);
+  text-align: center;
+  font-style: italic;
+}

@@ -1,0 +1,392 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+/* ================= 开场幕布 ================= */
+
+.curtain {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: -2vh;
+  height: 114vh;
+  z-index: 400;
+  background: linear-gradient(132deg, #071048 0%, var(--blue-deep) 34%, var(--blue) 78%, #0a1240 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 94%, 0 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  overflow: hidden;
+  animation: k-curtain 1.05s var(--e-inout) 0.92s forwards;
+  will-change: transform;
+}
+
+/* 幕布内部扫过的白色光带 */
+.curtain__beam {
+  position: absolute;
+  top: 42%;
+  left: -10%;
+  width: 120%;
+  height: clamp(70px, 8vw, 140px);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.92) 40%, #fff 60%, transparent);
+  opacity: 0.9;
+  animation: k-curtain-beam 1.15s var(--e-inout) 0.22s both;
+}
+
+.curtain__mark {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: clamp(64px, 7vw, 120px);
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  background: rgba(4, 6, 26, 0.5);
+  padding: 0.1em 0.42em;
+  box-shadow: 10px 10px 0 rgba(4, 6, 26, 0.55);
+  animation: k-curtain-mark 1.9s var(--e-out) 0.12s both;
+}
+
+.curtain__mark span {
+  color: var(--cyan);
+}
+
+.curtain__tag {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-style: italic;
+  letter-spacing: 0.5em;
+  color: rgba(244, 247, 255, 0.72);
+  animation: k-curtain-mark 1.9s var(--e-out) 0.24s both;
+}
+
+/* ================= 视频背景 ================= */
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* 高度冗余 14%，给视差留位移空间 */
+.hero__video {
+  position: absolute;
+  left: 0;
+  top: -7%;
+  width: 100%;
+  height: 114%;
+  object-fit: cover;
+  filter: saturate(1.15) brightness(0.9);
+  will-change: transform;
+}
+
+.hero__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(5, 10, 36, 0.5) 0%, rgba(5, 10, 36, 0.12) 38%, rgba(5, 10, 36, 0.94) 93%),
+    radial-gradient(90% 70% at 88% 6%, rgba(70, 232, 255, 0.14) 0%, transparent 55%),
+    radial-gradient(120% 90% at 12% 80%, rgba(5, 10, 36, 0.6) 0%, transparent 55%);
+}
+
+/* ================= 斜切光带（外层视差 / 内层扫入） ================= */
+
+.hero__beam-wrap {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.hero__beam-wrap--white {
+  top: 30%;
+  right: -14%;
+  width: 82%;
+  height: clamp(64px, 7.5vw, 132px);
+}
+
+.hero__beam-wrap--cyan {
+  top: 46%;
+  right: -10%;
+  width: 60%;
+  height: clamp(12px, 1.4vw, 22px);
+}
+
+.hero__beam {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.hero__beam--white {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.88) 26%, #fff 72%, rgba(255, 255, 255, 0.9) 100%);
+  box-shadow: 0 0 90px rgba(120, 180, 255, 0.35);
+  animation: k-beam 1.6s var(--e-out) 1.05s forwards;
+}
+
+.hero__beam--cyan {
+  background: linear-gradient(90deg, transparent, var(--cyan) 35%, var(--cyan) 100%);
+  animation: k-beam 1.6s var(--e-out) 1.22s forwards;
+}
+
+.hero__beam--cyan { --beam-final: 0.85; }
+
+@keyframes k-beam {
+  0% { opacity: 0; transform: rotate(-13deg) translateX(-22%) scaleX(0.55); }
+  55% { opacity: var(--beam-final, 0.92); }
+  100% { opacity: var(--beam-final, 0.92); transform: rotate(-13deg) translateX(0) scaleX(1); }
+}
+
+/* ================= 碎片 ================= */
+
+.hero__shard {
+  opacity: 0;
+  animation:
+    k-shard-in 0.9s var(--e-out) calc(2.4s + var(--fd) * 0.16) both,
+    shard-float 5.5s ease-in-out calc(3.6s + var(--fd)) infinite;
+}
+
+/* ================= 内容 ================= */
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: var(--nav-h);
+  padding-bottom: clamp(40px, 5vh, 72px);
+}
+
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: clamp(24px, 3.6vh, 44px);
+}
+
+/* 状态徽章：白底斜切，擦除揭示 */
+.hero__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  background: var(--white);
+  padding: 9px 18px;
+  transform: skewX(var(--skew-chip));
+  box-shadow: 5px 5px 0 rgba(4, 6, 26, 0.55);
+}
+
+.o-chip {
+  clip-path: inset(0 100% 0 0);
+  animation: k-wipe 0.85s var(--e-inout) 1.28s forwards;
+}
+
+.hero__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue-strong);
+  box-shadow: 0 0 10px rgba(43, 82, 255, 0.9);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* 右侧名字：黑条章 */
+.hero__eyebrow-name {
+  margin-left: auto;
+  color: #d3dbff;
+  font-style: italic;
+  background: rgba(4, 6, 26, 0.78);
+  padding: 9px 18px;
+  transform: skewX(var(--skew-chip));
+  border-right: 3px solid var(--cyan);
+}
+
+.o-name {
+  clip-path: inset(0 0 0 100%);
+  animation: k-wipe-l 0.85s var(--e-inout) 1.45s forwards;
+}
+
+@keyframes k-wipe-l {
+  0% { clip-path: inset(0 0 0 100%); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+/* ================= 大标题：遮罩压缩归位 ================= */
+
+.hero__title {
+  font-size: clamp(64px, 8.4vw, 164px);
+  line-height: 1.06;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.015em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.04em;
+  margin-bottom: clamp(36px, 5.5vh, 72px);
+  transform: skewX(-2deg);
+}
+
+/* 遮罩容器 */
+.hero__mask {
+  display: block;
+  overflow: hidden;
+  padding: 0 0.14em 0.1em;
+  margin: 0 -0.14em -0.1em;
+}
+
+.hero__line {
+  display: inline-block;
+  transform: translateY(120%) scaleY(1.4) skewY(5deg);
+  transform-origin: 0 100%;
+  text-shadow:
+    0 4px 0 rgba(4, 6, 26, 0.45),
+    0 10px 60px rgba(30, 62, 240, 0.5);
+  will-change: transform;
+}
+
+.o-line1 {
+  animation: k-mask-rise 1.3s var(--e-out) 1.32s forwards;
+}
+
+.o-line2 {
+  animation: k-mask-rise 1.3s var(--e-out) 1.5s forwards;
+}
+
+/* 「AI」电光蓝色块：横向擦除 + 微缩归位 */
+.hero__title-accent {
+  display: inline-block;
+  font-style: italic;
+  color: #fff;
+  background: var(--blue-strong);
+  padding: 0 0.14em;
+  margin-inline: 0.08em;
+  transform: skewX(var(--skew-chip));
+  box-shadow:
+    7px 7px 0 rgba(4, 6, 26, 0.7),
+    0 0 70px rgba(43, 82, 255, 0.6);
+}
+
+.o-accent {
+  clip-path: inset(0 100% 0 0);
+  animation:
+    k-wipe 0.7s var(--e-inout) 2.02s forwards,
+    k-accent-set 0.9s var(--e-out) 2.02s forwards;
+}
+
+@keyframes k-accent-set {
+  0% { transform: skewX(var(--skew-chip)) scale(1.12) translateX(-0.06em); }
+  100% { transform: skewX(var(--skew-chip)) scale(1) translateX(0); }
+}
+
+/* ================= 底部信息区 ================= */
+
+.hero__foot {
+  display: grid;
+  grid-template-columns: minmax(0, 560px) 1fr auto;
+  align-items: end;
+  gap: 48px;
+  border-top: 2px solid var(--line);
+  padding-top: 28px;
+}
+
+.o-foot {
+  opacity: 0;
+  animation: k-rise 1.15s var(--e-out) var(--od, 2.05s) forwards;
+}
+
+.hero__intro {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.9;
+  max-width: 54ch;
+}
+
+.hero__roles {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}
+
+.hero__roles li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.hero__role-index {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--cyan);
+}
+
+.hero__scroll {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-style: italic;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  transition: color 0.3s var(--ease);
+}
+
+.hero__scroll:hover {
+  color: var(--cyan);
+}
+
+.hero__scroll-line {
+  width: 56px;
+  height: 2px;
+  background: var(--line-strong);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__scroll-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--cyan);
+  transform: translateX(-100%);
+  animation: scan 2.2s var(--ease) infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateX(-100%); }
+  60% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+@media (max-width: 1280px) {
+  .hero__foot {
+    grid-template-columns: 1fr auto;
+  }
+  .hero__roles {
+    display: none;
+  }
+}

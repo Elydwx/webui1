@@ -1,0 +1,277 @@
+.about__grid {
+  display: grid;
+  grid-template-columns: minmax(360px, 520px) 1fr;
+  gap: clamp(48px, 6vw, 120px);
+  align-items: start;
+}
+
+/* ---------- 人物图：白框 + 电光蓝错位底板 + 遮罩揭示 ---------- */
+
+.about__portrait {
+  position: relative;
+  padding: 16px;
+  background: var(--bg-2);
+  border: 3px solid rgba(244, 247, 255, 0.92);
+  box-shadow: 0 24px 80px rgba(30, 62, 240, 0.35);
+}
+
+/* 错位的电光蓝底板：进场时从原位滑出 */
+.about__portrait::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--blue);
+  transform: translate(0, 0) skewX(-1.5deg);
+  opacity: 0;
+  transition:
+    transform 1.15s var(--e-out) 0.55s,
+    opacity 0.6s var(--e-out) 0.55s;
+}
+
+.about__portrait.in::before {
+  transform: translate(18px, 18px) skewX(-1.5deg);
+  opacity: 1;
+}
+
+.about__portrait-frame {
+  position: relative;
+  overflow: hidden;
+}
+
+.about__portrait-plx {
+  display: block;
+  will-change: transform;
+}
+
+.about__portrait img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  filter: saturate(1.05) contrast(1.03);
+  transform: scale(1.24);
+  transition:
+    transform 1.8s var(--e-out) 0.15s,
+    filter 0.6s var(--ease);
+}
+
+.about__portrait.in img {
+  transform: scale(1.08);
+}
+
+.about__portrait:hover img {
+  filter: saturate(1.15) contrast(1.05) brightness(1.05);
+}
+
+.about__portrait figcaption {
+  padding-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  font-style: italic;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.9s var(--e-out) 0.9s,
+    transform 0.9s var(--e-out) 0.9s;
+}
+
+.about__portrait.in figcaption {
+  opacity: 1;
+  transform: none;
+}
+
+/* 角标：青色 L 形（延迟浮现） */
+.about__portrait-corner {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 3px solid var(--cyan);
+  opacity: 0;
+  transition: opacity 0.7s var(--e-out) 1.05s;
+}
+
+.about__portrait.in .about__portrait-corner {
+  opacity: 1;
+}
+
+.about__portrait-corner--tl {
+  top: -3px;
+  left: -3px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.about__portrait-corner--br {
+  bottom: -3px;
+  right: -3px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* ---------- 文字区 ---------- */
+
+.about__lead {
+  font-size: clamp(26px, 2.2vw, 40px);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  margin-bottom: 40px;
+  max-width: 26em;
+  transform: skewX(-2deg);
+  text-shadow: 0 4px 30px rgba(30, 62, 240, 0.45);
+}
+
+.about__paras {
+  display: grid;
+  gap: 20px;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 2;
+  margin-bottom: 56px;
+}
+
+/* ---------- 联系方式 + 教育 ---------- */
+
+.about__meta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  border-top: 2px solid var(--line);
+  padding-top: 36px;
+}
+
+.about__contacts {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px 40px;
+}
+
+.about__contacts li {
+  display: grid;
+  gap: 8px;
+}
+
+.about__contacts .mono-label {
+  color: var(--cyan);
+  font-style: italic;
+}
+
+.about__contact-value {
+  font-size: 17px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  width: fit-content;
+}
+
+a.about__contact-value {
+  border-bottom: 2px solid var(--line-strong);
+  padding-bottom: 2px;
+  transition:
+    color 0.3s var(--ease),
+    border-color 0.3s var(--ease);
+}
+
+a.about__contact-value:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+}
+
+.about__edu {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  text-align: right;
+  min-width: 220px;
+}
+
+.about__edu .mono-label {
+  color: var(--cyan);
+  font-style: italic;
+}
+
+.about__edu-school {
+  font-size: 20px;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.about__edu-detail {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ---------- 数据条：斜切数字块 ---------- */
+
+.about__stats {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: clamp(72px, 8vw, 128px);
+  border-top: 2px solid var(--line);
+}
+
+.stat {
+  position: relative;
+  padding: clamp(32px, 3vw, 52px) clamp(24px, 2.4vw, 44px) 0;
+  display: grid;
+  gap: 18px;
+  border-right: 1px solid var(--line);
+  transition: background 0.4s var(--ease);
+}
+
+.stat:last-child {
+  border-right: 0;
+}
+
+.stat:hover {
+  background: rgba(30, 62, 240, 0.1);
+}
+
+/* 顶部青色斜切短带 */
+.stat::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: clamp(24px, 2.4vw, 44px);
+  width: 56px;
+  height: 6px;
+  background: var(--cyan);
+  transform: skewX(var(--skew-chip));
+}
+
+.stat__value {
+  font-family: var(--font-sans);
+  font-size: clamp(48px, 4.6vw, 86px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  transform: skewX(-3deg);
+  text-shadow: 0 6px 40px rgba(30, 62, 240, 0.5);
+}
+
+.stat__suffix {
+  color: var(--cyan);
+  font-size: 0.6em;
+  vertical-align: 0.28em;
+  margin-left: 2px;
+}
+
+.stat__labels {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stat__cn {
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.06em;
+}

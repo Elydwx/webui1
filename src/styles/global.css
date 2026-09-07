@@ -1,0 +1,296 @@
+/* ================================================================
+   GLOBAL — P3R 风格设计系统
+   电光蓝基底 / 白色斜切 / 大字号斜体 / 青色高光 / 碎片点缀
+   ================================================================ */
+
+:root {
+  /* 色板：深海军蓝黑基底 + 电光蓝主色 + 青色高光 + 白色结构块 */
+  --bg: #050a24;
+  --bg-2: #071033;
+  --bg-3: #0b1546;
+  --blue: #1e3ef0;
+  --blue-strong: #2b52ff;
+  --blue-deep: #0a1a6e;
+  --cyan: #46e8ff;
+  --cyan-dim: rgba(70, 232, 255, 0.16);
+  --white: #f4f7ff;
+  --ink: #04061a;
+
+  --line: rgba(150, 180, 255, 0.14);
+  --line-strong: rgba(150, 180, 255, 0.32);
+  --text: #eef2ff;
+  --muted: #96a5da;
+  --faint: #5c6aa4;
+
+  /* 碎片点缀色（克制使用） */
+  --pink: #ff3fae;
+  --green: #2fffab;
+  --orange: #ffb63f;
+
+  /* 字体 */
+  --font-sans: 'Space Grotesk', 'Inter', -apple-system, 'Segoe UI',
+    'PingFang SC', 'HarmonyOS Sans SC', 'Source Han Sans SC',
+    'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', ui-monospace, 'SF Mono',
+    Consolas, 'Noto Sans Mono', 'PingFang SC', 'Microsoft YaHei', monospace;
+
+  /* 版心 1700px */
+  --container: 1700px;
+  --gutter: clamp(24px, 3vw, 60px);
+
+  /* 统一斜切角度 —— 整站的动势来源 */
+  --skew: -6deg;
+  --skew-chip: -10deg;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.2, 1);
+  --nav-h: 88px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
+
+body {
+  font-family: var(--font-sans);
+  background:
+    radial-gradient(140% 90% at 85% -10%, rgba(43, 82, 255, 0.22) 0%, transparent 55%),
+    radial-gradient(120% 80% at 0% 108%, rgba(30, 62, 240, 0.16) 0%, transparent 50%),
+    var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* 全局噪点颗粒 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: var(--cyan);
+  color: var(--ink);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--blue-deep);
+  border-radius: 99px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--blue-strong);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ---------- 布局 ---------- */
+
+.container {
+  width: min(var(--container), 100% - var(--gutter) * 2);
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(96px, 10vw, 180px);
+  position: relative;
+}
+
+/* ---------- 通用：栏目头部（含 ghost 大字） ---------- */
+
+.sec-head {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding-bottom: 30px;
+  margin-bottom: clamp(48px, 5vw, 88px);
+}
+
+/* 背景 ghost 英文大字 —— P3R 菜单式水印（外层做视差，内层做进场） */
+.sec-head__ghost {
+  position: absolute;
+  right: -0.04em;
+  bottom: -0.12em;
+  z-index: 0;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+.sec-head__ghost i {
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(96px, 11vw, 210px);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: rgba(43, 82, 255, 0.17);
+}
+
+.sec-head__left {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+/* 序号：青色斜切徽章 */
+.sec-head__index {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  background: var(--cyan);
+  padding: 8px 16px;
+  transform: skewX(var(--skew-chip));
+  box-shadow: 4px 4px 0 rgba(4, 6, 26, 0.65);
+}
+
+.sec-head__title {
+  font-size: clamp(40px, 4.2vw, 74px);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.03em;
+  line-height: 1.05;
+  transform: skewX(-2deg);
+  text-shadow: 0 6px 40px rgba(30, 62, 240, 0.55);
+}
+
+.sec-head__en {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: 0.34em;
+  color: var(--cyan);
+  padding-bottom: 10px;
+  white-space: nowrap;
+}
+
+/* ---------- 标签 / 小字 ---------- */
+
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  border: 1px solid var(--line-strong);
+  padding: 5px 12px;
+  transform: skewX(var(--skew-chip));
+  white-space: nowrap;
+}
+
+/* ---------- 按钮：斜切块 ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.12em;
+  padding: 14px 28px;
+  border: 2px solid var(--line-strong);
+  color: var(--text);
+  transform: skewX(var(--skew-chip));
+  transition: all 0.3s var(--ease);
+  white-space: nowrap;
+}
+
+.btn:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  transform: skewX(var(--skew-chip)) translateY(-2px);
+}
+
+.btn--solid {
+  background: var(--blue-strong);
+  border-color: var(--blue-strong);
+  color: #fff;
+  box-shadow: 5px 5px 0 rgba(4, 6, 26, 0.7);
+}
+
+.btn--solid:hover {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  color: var(--ink);
+  box-shadow: 5px 5px 0 rgba(4, 6, 26, 0.7), 0 10px 44px rgba(70, 232, 255, 0.35);
+}
+
+.btn__arrow {
+  display: inline-block;
+  transition: transform 0.35s var(--ease);
+}
+
+.btn:hover .btn__arrow {
+  transform: translate(2px, -2px);
+}
+
+/* ---------- 碎片粒子（克制点缀） ---------- */
+
+.shard {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.85;
+  animation: shard-float 5.5s ease-in-out infinite;
+}
+
+@keyframes shard-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(8deg); }
+}
+
+/* 滚动入场与关键帧见 styles/motion.css */

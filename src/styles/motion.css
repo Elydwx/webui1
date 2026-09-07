@@ -1,0 +1,185 @@
+/* ================================================================
+   MOTION — 关键帧库与滚动进场编排
+   节奏：慢（1.0s–1.8s）；缓动：expo/quint 出，无弹跳；只动
+   transform / opacity / clip-path，GPU 友好
+   ================================================================ */
+
+:root {
+  --e-out: cubic-bezier(0.19, 1, 0.22, 1);      /* expo-out：丝滑收尾 */
+  --e-inout: cubic-bezier(0.77, 0, 0.18, 1);    /* 强 inout：幕布/遮罩 */
+  --e-soft: cubic-bezier(0.33, 1, 0.68, 1);     /* 柔和 out */
+}
+
+/* ---------------- 关键帧 ---------------- */
+
+/* 幕布上移退场（底边斜切） */
+@keyframes k-curtain {
+  to { transform: translateY(-112%); }
+}
+
+@keyframes k-curtain-mark {
+  0% { opacity: 0; transform: skewX(-10deg) scale(0.94) translateY(14px); }
+  38%, 72% { opacity: 1; transform: skewX(-10deg) scale(1) translateY(0); }
+  100% { opacity: 1; transform: skewX(-10deg) scale(1.02) translateY(-8px); }
+}
+
+@keyframes k-curtain-beam {
+  0% { transform: translateX(-130%) rotate(-13deg); }
+  100% { transform: translateX(130%) rotate(-13deg); }
+}
+
+/* 标题：遮罩内压缩上升归位 */
+@keyframes k-mask-rise {
+  0% { transform: translateY(120%) scaleY(1.4) skewY(5deg); }
+  100% { transform: translateY(0) scaleY(1) skewY(0deg); }
+}
+
+/* 斜切块横向擦除揭示 */
+@keyframes k-wipe {
+  0% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+/* 通用上浮 */
+@keyframes k-rise {
+  0% { opacity: 0; transform: translateY(52px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* 碎片浮现 */
+@keyframes k-shard-in {
+  0% { opacity: 0; transform: translateY(26px) rotate(-14deg) scale(0.5); }
+  100% { opacity: 0.85; transform: translateY(0) rotate(0deg) scale(1); }
+}
+
+/* ---------------- 通用滚动进场 ---------------- */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(48px);
+  transition:
+    opacity 1.15s var(--e-out),
+    transform 1.15s var(--e-out);
+}
+
+[data-reveal].in {
+  opacity: 1;
+  transform: none;
+}
+
+[data-delay='1'] { transition-delay: 0.12s; }
+[data-delay='2'] { transition-delay: 0.26s; }
+[data-delay='3'] { transition-delay: 0.4s; }
+[data-delay='4'] { transition-delay: 0.54s; }
+[data-delay='5'] { transition-delay: 0.68s; }
+
+/* ---------------- 栏目头部编排 ----------------
+   顺序：ghost 大字大幅滑入 → 序号章擦除 → 中文标题遮罩上升
+        → 英文标签浮现 → 底线拉开 */
+
+.sec-head .sec-head__ghost i {
+  display: inline-block;
+  opacity: 0;
+  transform: translateX(15vw) scale(1.06) skewX(-6deg);
+  transition:
+    opacity 1.5s var(--e-out),
+    transform 1.5s var(--e-out);
+}
+
+.sec-head.in .sec-head__ghost i {
+  opacity: 1;
+  transform: translateX(0) scale(1) skewX(-6deg);
+}
+
+.sec-head .sec-head__index {
+  clip-path: inset(0 100% 0 0);
+}
+
+.sec-head.in .sec-head__index {
+  animation: k-wipe 0.7s var(--e-inout) 0.22s forwards;
+}
+
+.sec-head__title {
+  overflow: hidden;
+  padding: 0 0.14em 0.08em;
+  margin: 0 -0.14em -0.08em;
+}
+
+.sec-head__title-inner {
+  display: inline-block;
+  transform: translateY(120%) scaleY(1.4) skewY(5deg);
+  transform-origin: 0 100%;
+}
+
+.sec-head.in .sec-head__title-inner {
+  animation: k-mask-rise 1.15s var(--e-out) 0.3s forwards;
+}
+
+.sec-head__en {
+  opacity: 0;
+  transform: translateX(-26px);
+  transition:
+    opacity 0.9s var(--e-out) 0.7s,
+    transform 0.9s var(--e-out) 0.7s;
+}
+
+.sec-head.in .sec-head__en {
+  opacity: 1;
+  transform: none;
+}
+
+/* 底线：从左向右拉开 */
+.sec-head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--line);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.5s var(--e-inout) 0.25s;
+}
+
+.sec-head.in::after {
+  transform: scaleX(1);
+}
+
+/* ---------------- 图片揭示遮罩 ---------------- */
+
+.reveal-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(100deg, var(--blue) 72%, var(--cyan) 100%);
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform 1.1s var(--e-inout) 0.14s;
+  pointer-events: none;
+}
+
+.in .reveal-cover {
+  transform: scaleX(0);
+}
+
+/* ---------------- 降级 ---------------- */
+
+html.no-motion *,
+html.no-motion *::before,
+html.no-motion *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+html.no-motion [data-reveal],
+html.no-motion .sec-head__title-inner,
+html.no-motion .sec-head .sec-head__ghost i,
+html.no-motion .sec-head__en {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html.no-motion .curtain {
+  display: none !important;
+}

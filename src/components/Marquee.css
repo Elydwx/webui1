@@ -1,0 +1,64 @@
+/* 电光蓝斜切丝带 —— P3R 式横幅 */
+
+.marquee {
+  position: relative;
+  z-index: 5;
+  background: var(--blue);
+  border-block: 3px solid rgba(255, 255, 255, 0.92);
+  overflow: hidden;
+  padding-block: 20px;
+  transform: rotate(-1.4deg) scale(1.03);
+  margin-block: clamp(-20px, -1.4vw, -10px);
+  box-shadow:
+    0 14px 60px rgba(30, 62, 240, 0.45),
+    0 0 0 1px rgba(4, 6, 26, 0.4);
+}
+
+/* 顶部青色细线呼应 */
+.marquee::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 6px;
+  height: 2px;
+  background: var(--cyan);
+  opacity: 0.7;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 36px;
+  padding-right: 36px;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.26em;
+  color: #fff;
+  white-space: nowrap;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 rgba(4, 6, 26, 0.5);
+}
+
+.marquee__star {
+  color: var(--cyan);
+  font-size: 11px;
+  text-shadow: none;
+}
