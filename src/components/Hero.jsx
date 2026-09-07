@@ -33,6 +33,8 @@ function Curtain() {
 }
 
 export default function Hero() {
+  const mediaUrl = (file) => `${import.meta.env.BASE_URL}media/${file}`
+
   return (
     <section className="hero">
       <Curtain />
@@ -41,7 +43,7 @@ export default function Hero() {
       <div className="hero__bg">
         <video
           className="hero__video"
-          poster="/media/hero-poster.jpg"
+          poster={mediaUrl('hero-poster.jpg')}
           data-plx="0.16"
           data-plx-max="64"
           autoPlay
@@ -50,8 +52,8 @@ export default function Hero() {
           playsInline
           preload="auto"
         >
-          <source src="/media/hero.webm" type="video/webm" />
-          <source src="/media/hero.mp4" type="video/mp4" />
+          <source src={mediaUrl('hero.webm')} type="video/webm" />
+          <source src={mediaUrl('hero.mp4')} type="video/mp4" />
         </video>
         <div className="hero__shade" />
         {/* 斜切光带：外层视差，内层扫入动画 */}

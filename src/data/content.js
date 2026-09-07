@@ -3,6 +3,8 @@
  * 说明：带 [占位] 的内容是根据简历合理虚构的，请替换为真实信息
  * ============================================================ */
 
+const media = (file) => `${import.meta.env.BASE_URL}media/${file}`
+
 export const site = {
   nameCn: '谢丰帆',
   nameEn: 'XIE FENGFAN',
@@ -87,7 +89,7 @@ export const works = {
       en: 'BRAND IDENTITY SYSTEM',
       tags: ['品牌', 'VI 系统', '视觉规范'],
       year: '2026',
-      img: '/media/p1.jpg',
+      img: media('p1.jpg'),
       size: 'lg',
     },
     {
@@ -96,7 +98,7 @@ export const works = {
       en: 'AI VISUAL EXPLORATION',
       tags: ['AIGC', 'ComfyUI', '视觉实验'],
       year: '2025',
-      img: '/media/p2.jpg',
+      img: media('p2.jpg'),
       size: 'sm',
     },
     {
@@ -105,7 +107,7 @@ export const works = {
       en: 'E-COMMERCE CAMPAIGN',
       tags: ['电商', 'KV 主视觉', '运营视觉'],
       year: '2025',
-      img: '/media/p3.jpg',
+      img: media('p3.jpg'),
       size: 'sm',
     },
     {
@@ -114,7 +116,7 @@ export const works = {
       en: 'UI VISUAL CONCEPT',
       tags: ['UI', '动效', '概念设计'],
       year: '2024',
-      img: '/media/p4.jpg',
+      img: media('p4.jpg'),
       size: 'lg',
     },
   ],

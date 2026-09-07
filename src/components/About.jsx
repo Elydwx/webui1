@@ -43,6 +43,8 @@ function Counter({ value, suffix }) {
 }
 
 export default function About() {
+  const portraitUrl = `${import.meta.env.BASE_URL}media/portrait.jpg`
+
   return (
     <section className="section about" id="about">
       <div className="container">
@@ -64,7 +66,7 @@ export default function About() {
           <figure className="about__portrait" data-io>
             <div className="about__portrait-frame">
               <span className="about__portrait-plx" data-plx="0.09" data-plx-max="22">
-                <img src="/media/portrait.jpg" alt="谢丰帆" loading="lazy" />
+                <img src={portraitUrl} alt="谢丰帆" loading="lazy" />
               </span>
               <span className="reveal-cover" />
             </div>
